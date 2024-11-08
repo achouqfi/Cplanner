@@ -12,17 +12,36 @@ This is a Laravel starter project that includes a comprehensive setup with Docke
 
 ## Features
 
-- **Laravel Sail**: Easy Docker setup for Laravel.
-- **Mailpit**: Local email testing.
-- **MySQL**: Database management.
-- **PhpMyAdmin**: Web interface for MySQL.
-- **Redis**: Advanced key-value store.
+## Features
+
+- **Laravel Sail**: A light-weight command-line interface for interacting with Laravel's default Docker development environment. It provides a simple way to set up and manage a local development environment using Docker.
+  - **Mailpit**: Local email testing.
+  - **MySQL**: Database management.
+  - **PhpMyAdmin**: Web interface for MySQL.
+  - **Redis**: Advanced key-value store.
 - **Spatie Packages**:
-  - Settings
-  - SEO
-  - Media Library
-  - Permissions
-- **Filament PHP**: Admin panel.
+  - **Media Library**: Associate files with Eloquent models.
+  - **Settings**: Manage application settings.
+  - **Laravel Translatable**: Make Eloquent models translatable.
+  - **Laravel Sluggable**: Generate slugs for Eloquent models.
+  - **Permission**: Manage user permissions and roles.
+  - **Activity Log**: Log activity in your application.
+  - **Laravel Backup**: Backup your application.
+  - **Image**: Manipulate images.
+  - **Laravel Tags**: Add tags to Eloquent models.
+  - **Laravel Searchable**: Make Eloquent models searchable.
+  - **Enum**: Provides support for creating and using enums in PHP.
+
+- **Filament PHP**: A beautiful, modern, and customizable admin panel for Laravel applications.
+  - **User Management**: Manage users and roles.
+  - **Settings**: Manage application settings.
+  - **Activity Log**: View activity logs.
+  - **Media Library**: Manage media files.
+  - **Permissions**: Manage user permissions.
+  - **SEO**: Manage SEO settings.
+  - **Tags**: Manage tags.
+  - **Translations**: Manage translations.
+  - **Backup**: Backup the application.
 
 ## Installation
 
