@@ -13,11 +13,33 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Clean the public folder in storage
+        $this->cleanStorageMediaFolder();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // call user seeder
+         $this->call([
+            RolesAndPermissionsSeeder::class,
+            TagSeeder::class,
+            UserSeeder::class,
+            // CategorySeeder::class,
+            // CustomFieldSeeder::class,
+            // PostSeeder::class,
+            // FaqSeeder::class,
+            // ReviewSeeder::class,
         ]);
+
+    }
+
+
+            /**
+     * Clean the public folder in storage.
+     */
+    protected function cleanStorageMediaFolder(): void
+    {
+        $mediaFolder = storage_path('app/public/media');
+
+        if (File::exists($mediaFolder)) {
+            File::cleanDirectory($mediaFolder);
+        }
     }
 }
