@@ -31,6 +31,12 @@ This is a Laravel starter project that includes a comprehensive setup with Docke
   - **Laravel Tags**: Add tags to Eloquent models.
   - **Laravel Searchable**: Make Eloquent models searchable.
   - **Enum**: Provides support for creating and using enums in PHP.
+- **Laravel Debugbar**: Integrates PHP Debug Bar with Laravel.
+- **Laravel Telescope**: An elegant debug assistant for Laravel applications.
+- **Laravel IDE Helper**: Generates a PHPDoc block for Laravel facades.
+- **Laravel Socialite**: Provides an expressive, fluent interface to OAuth authentication.
+- **Laravel Tinker**: Powerful REPL for the Laravel framework.
+- **Laravel Seo**: A package to handle the SEO in any Laravel application, big or small.
 
 - **Filament PHP**: A beautiful, modern, and customizable admin panel for Laravel applications.
   - **User Management**: Manage users and roles.
