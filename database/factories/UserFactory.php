@@ -29,6 +29,8 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'created_at' => now()->subDays(rand(0, 365))->format('Y-m-d H:i:s'),
+            'updated_at' => now()->subDays(rand(0, 365))->format('Y-m-d H:i:s'),
         ];
     }
 
