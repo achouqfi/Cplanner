@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles, SoftDeletes;
 
     /**
@@ -54,5 +53,13 @@ class User extends Authenticatable
     public function phones()
     {
         return $this->morphMany(Phone::class, 'phoneable');
+    }
+
+    /**
+     * Get all of the posts for the user.
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'author_id');
     }
 }

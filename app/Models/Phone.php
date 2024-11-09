@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Phone extends Model
 {
-    /** @use HasFactory<\Database\Factories\PhoneFactory> */
     use HasFactory;
 
     /**
@@ -22,6 +21,10 @@ class Phone extends Model
         'number',
         'type',
         'verified_at',
+    ];
+
+    protected $casts = [
+        'verified_at' => 'datetime',
     ];
 
     /**
