@@ -13,9 +13,9 @@ return new class extends SettingsMigration
         ]);
 
         $this->migrator->add('hero.subtitle', [
-            'en' => "Let's Leave The Road, And Take The World For You",
-            'fr' => "Quittons la Route, Et Prenons Le World For You",
-            'es' => "Dejemos el Camino, Y Tomemos El World For You"
+            'en' => "Let's Leave The Road, And Take The Laravel Starter",
+            'fr' => "Quittons la Route, Et Prenons Le Laravel Starter",
+            'es' => "Dejemos el Camino, Y Tomemos El Laravel Starter"
         ]);
 
         $this->migrator->add('hero.description', [

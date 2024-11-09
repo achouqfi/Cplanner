@@ -50,12 +50,12 @@ return new class extends SettingsMigration
         $this->migrator->add('about.have_reviews', true);
 
         $this->migrator->add('about.title', [
-            'en' => 'Travel in Agency World For You World',
-            'fr' => 'Voyage dans le monde de l\'agence World For You',
-            'es' => 'Viaje en la agencia World For You World'
+            'en' => 'Travel in Agency Laravel Starter World',
+            'fr' => 'Voyage dans le monde de l\'agence Laravel Starter',
+            'es' => 'Viaje en la agencia Laravel Starter World'
         ]);
         $this->migrator->add('about.desc', [
-            'en' => 'World Best Travel in AgencyWorld For You',
+            'en' => 'World Best Travel in Agency Laravel Starter',
             'fr' => 'Meilleure agence de voyage au monde',
             'es' => 'Mejor agencia de viajes del mundo'
         ]);

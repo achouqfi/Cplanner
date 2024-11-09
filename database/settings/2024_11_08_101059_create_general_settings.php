@@ -7,7 +7,7 @@ return new class extends SettingsMigration
     public function up(): void
     {
         $this->migrator->add('general.site_name', [
-            'en' => 'World For You',
+            'en' => 'Laravel Starter',
             'fr' => 'Monde Pour Vous',
             'es' => 'Mundo Para Ti'
         ]);

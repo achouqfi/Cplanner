@@ -10,7 +10,7 @@ return new class extends SettingsMigration
         $this->migrator->add('seo.meta_googlebot', 'index, follow');
         $this->migrator->add('seo.meta_bingbot', 'index, follow');
         $this->migrator->add('seo.meta_title', [
-            'en' => 'World For You',
+            'en' => 'Laravel Starter',
             'fr' => 'Monde Pour Vous',
             'es' => 'Mundo Para Ti'
         ]);
@@ -25,12 +25,12 @@ return new class extends SettingsMigration
             'es' => 'mundo, para, ti'
         ]);
         $this->migrator->add('seo.meta_author', [
-            'en' => 'World For You',
+            'en' => 'Laravel Starter',
             'fr' => 'Monde Pour Vous',
             'es' => 'Mundo Para Ti'
         ]);
         $this->migrator->add('seo.og_title', [
-            'en' => 'World For You',
+            'en' => 'Laravel Starter',
             'fr' => 'Monde Pour Vous',
             'es' => 'Mundo Para Ti'
         ]);
@@ -40,7 +40,7 @@ return new class extends SettingsMigration
             'es' => 'Esta es una descripción del sitio.'
         ]);
         $this->migrator->add('seo.tw_title', [
-            'en' => 'World For You',
+            'en' => 'Laravel Starter',
             'fr' => 'Monde Pour Vous',
             'es' => 'Mundo Para Ti'
         ]);
