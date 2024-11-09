@@ -12,7 +12,7 @@ class UsertPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -20,7 +20,7 @@ class UsertPolicy
      */
     public function view(User $user, User $model): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -28,7 +28,7 @@ class UsertPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -36,7 +36,7 @@ class UsertPolicy
      */
     public function update(User $user, User $model): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -44,7 +44,7 @@ class UsertPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -52,7 +52,7 @@ class UsertPolicy
      */
     public function restore(User $user, User $model): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -60,6 +60,6 @@ class UsertPolicy
      */
     public function forceDelete(User $user, User $model): bool
     {
-        //
+        return true;
     }
 }
