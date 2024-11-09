@@ -47,4 +47,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get all of the user's phones.
+     */
+    public function phones()
+    {
+        return $this->morphMany(Phone::class, 'phoneable');
+    }
 }

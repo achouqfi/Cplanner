@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             TagSeeder::class,
             UserSeeder::class,
+            PhoneSeeder::class,
             // CategorySeeder::class,
             // CustomFieldSeeder::class,
             // PostSeeder::class,
