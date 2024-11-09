@@ -23,9 +23,9 @@ class DatabaseSeeder extends Seeder
             TagSeeder::class,
             UserSeeder::class,
             PhoneSeeder::class,
-            // CategorySeeder::class,
+            CategorySeeder::class,
+            PostSeeder::class,
             // CustomFieldSeeder::class,
-            // PostSeeder::class,
             // FaqSeeder::class,
             // ReviewSeeder::class,
         ]);

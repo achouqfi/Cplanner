@@ -18,7 +18,7 @@ class PhoneFactory extends Factory
     public function definition(): array
     {
         return [
-            'phoneable_id' => $this->faker->numberBetween(1, 100),
+            'phoneable_id' => User::InRandomOrder()->first()->id,
             'phoneable_type' => User::class,
             'country_code' => $this->faker->optional()->numerify('+##'),
             'number' => $this->faker->unique()->phoneNumber,
