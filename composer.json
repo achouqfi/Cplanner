@@ -2,12 +2,18 @@
     "name": "abdessamadbettal/laravel-starter",
     "type": "project",
     "description": "A Laravel starter project with some pre-installed packages and configurations.",
-    "keywords": ["laravel", "starter", "project", "packages", "configurations"],
+    "keywords": [
+        "laravel",
+        "starter",
+        "project",
+        "packages",
+        "configurations"
+    ],
     "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/abdessamadbettal/laravel-starter.git"
-      },
+    },
     "require": {
         "php": "^8.2",
         "filament/filament": "^3.2",
@@ -52,7 +58,8 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
