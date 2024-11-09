@@ -24,6 +24,7 @@
         "laravel/tinker": "^2.9",
         "propaganistas/laravel-phone": "^5.3",
         "ralphjsmit/laravel-seo": "^1.6",
+        "rawilk/filament-password-input": "^2.0",
         "spatie/laravel-activitylog": "^4.9",
         "spatie/laravel-medialibrary": "^11.9",
         "spatie/laravel-permission": "^6.10",

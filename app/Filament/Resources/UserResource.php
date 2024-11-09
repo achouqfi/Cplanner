@@ -12,6 +12,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Rawilk\FilamentPasswordInput\Password;
+use Filament\Forms\Components\Select;
 
 class UserResource extends Resource
 {
@@ -31,10 +33,13 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->required()
-                    ->maxLength(255),
+                Password::make('password')
+                ->regeneratePassword()
+                ->copyable()
+                ->newPasswordLength(8)
+                ->revealable(true)
+                ->label('Renew password (leave empty to keep the current one)'),
+                    Select::make('roles')->multiple()->relationship('roles', 'name')->preload(),
             ]);
     }
 
