@@ -12,8 +12,6 @@ This is a Laravel starter project that includes a comprehensive setup with Docke
 
 ## Features
 
-## Features
-
 - **Laravel Sail**: A light-weight command-line interface for interacting with Laravel's default Docker development environment. It provides a simple way to set up and manage a local development environment using Docker.
   - **Mailpit**: Local email testing.
   - **MySQL**: Database management.
@@ -54,6 +52,7 @@ This is a Laravel starter project that includes a comprehensive setup with Docke
 ### Prerequisites
 
 - Docker
+- PHP 8.2 or Higher
 - Docker Compose
 - Composer
 - Node.js and npm
@@ -62,7 +61,7 @@ This is a Laravel starter project that includes a comprehensive setup with Docke
 
 1. **Clone the repository**:
     ```sh
-    git clone https://github.com/your-username/laravel-starter.git
+    git clone https://github.com/abdessamadbettal/laravel-starter.git
     cd laravel-starter
     ```
 
@@ -88,18 +87,14 @@ This is a Laravel starter project that includes a comprehensive setup with Docke
 
 6. **Start Docker containers**:
     ```sh
-    ./vendor/bin/sail up -d
+    sail up -d
     ```
 
 7. **Run database migrations**:
     ```sh
-    ./vendor/bin/sail artisan migrate
+    sail artisan migrate:fresh --seed
     ```
 
-8. **Install Filament PHP**:
-    ```sh
-    ./vendor/bin/sail artisan filament:install
-    ```
 
 ## Usage
 
@@ -107,18 +102,12 @@ This is a Laravel starter project that includes a comprehensive setup with Docke
 - **PhpMyAdmin**: [http://localhost:8080](http://localhost:8080)
 - **Mailpit**: [http://localhost:8025](http://localhost:8025)
 
-## Additional Configuration
+### Filament Admin Panel
 
-### Spatie Packages
-
-- **Settings**: Configure settings in `config/settings.php`.
-- **SEO**: Configure SEO settings in `config/seo.php`.
-- **Media Library**: Configure media library in `config/media-library.php`.
-- **Permissions**: Configure permissions in `config/permission.php`.
-
-### Filament PHP
-
-- Access the admin panel at [http://localhost/admin](http://localhost/admin).
+- **Access the admin panel**: [http://localhost/admin](http://localhost/admin)
+- **Default Admin User Credentials**:
+  - **Email**: `admin@example.com`
+  - **Password**: `password`
 
 ## Contributing
 
