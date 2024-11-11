@@ -22,11 +22,6 @@ class TagFactory extends Factory
                 'fr' => $this->faker->word,
                 'es' => $this->faker->word
             ],
-            'slug' => [
-                'en' => $this->faker->slug,
-                'fr' => $this->faker->slug,
-                'es' => $this->faker->slug
-            ],
             'type' => $this->faker->randomElement(['post', 'product', 'event']),
             'order_column' => $this->faker->numberBetween(0, 100),
         ];

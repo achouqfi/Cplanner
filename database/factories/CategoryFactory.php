@@ -22,11 +22,6 @@ class CategoryFactory extends Factory
                 'fr' => $this->faker->word,
                 'es' => $this->faker->word
             ],
-            'slug' => [
-                'en' => $this->faker->slug,
-                'fr' => $this->faker->slug,
-                'es' => $this->faker->slug
-            ],
             'description' => [
                 'en' => $this->faker->sentence,
                 'fr' => $this->faker->sentence,

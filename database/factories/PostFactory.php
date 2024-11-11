@@ -22,11 +22,6 @@ class PostFactory extends Factory
             'es' => $this->faker->sentence,
         ];
 
-        $slug = [
-            'en' => $this->faker->slug,
-            'fr' => $this->faker->slug,
-            'es' => $this->faker->slug,
-        ];
 
         $content = <<<EOD
         # Full Stack Developer
@@ -46,7 +41,6 @@ class PostFactory extends Factory
 
         return [
             'title' => $title,
-            'slug' => $slug,
             'content' => [
                 'en' => $content,
                 'fr' => $content,
