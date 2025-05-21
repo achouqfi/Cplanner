@@ -18,15 +18,15 @@ const props = defineProps({
 });
 
 const alternateUrls = {
-    en: 'https://lara4.com/en',
-    fr: 'https://lara4.com/fr',
-    es: 'https://lara4.com/es'
+    en: 'https://Cplanner.com/en',
+    fr: 'https://Cplanner.com/fr',
+    es: 'https://Cplanner.com/es'
 };
 
 const titles = {
-    en: 'Lara4 - Laravel Vue Inertia Starter Kit',
-    fr: 'Lara4 - Kit de démarrage Laravel Vue Inertia',
-    es: 'Lara4 - Kit de inicio Laravel Vue Inertia'
+    en: 'Cplanner - Laravel Vue Inertia Starter Kit',
+    fr: 'Cplanner - Kit de démarrage Laravel Vue Inertia',
+    es: 'Cplanner - Kit de inicio Laravel Vue Inertia'
 };
 
 const descriptions = {
@@ -55,7 +55,7 @@ const descriptions = {
             <meta property="og:url" :content="alternateUrls[currentLocale]" />
             <meta property="og:title" :content="titles[currentLocale]" />
             <meta property="og:description" :content="descriptions[currentLocale]" />
-            <meta property="og:image" content="https://lara4.com/favicon.png" />
+            <meta property="og:image" content="https://Cplanner.com/favicon.png" />
             <meta property="og:locale" :content="currentLocale" />
             <meta property="og:locale:alternate" content="en_US" />
             <meta property="og:locale:alternate" content="fr_FR" />
@@ -66,7 +66,7 @@ const descriptions = {
             <meta property="twitter:url" :content="alternateUrls[currentLocale]" />
             <meta property="twitter:title" :content="titles[currentLocale]" />
             <meta property="twitter:description" :content="descriptions[currentLocale]" />
-            <meta property="twitter:image" content="https://lara4.com/favicon.png" />
+            <meta property="twitter:image" content="https://Cplanner.com/favicon.png" />
         </Head>
 
         <Hero />

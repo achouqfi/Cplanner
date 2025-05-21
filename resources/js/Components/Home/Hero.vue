@@ -11,7 +11,7 @@ const props = defineProps({
     }
 });
 
-// Dynamic typewriter words based on Lara4 features
+// Dynamic typewriter words based on Cplanner features
 const typedStrings = [
     'Modern',
     'Powerful',
@@ -71,7 +71,7 @@ const features = [
                 <span class="block text-4xl sm:text-6xl lg:text-7xl">
                     <span class="relative whitespace-nowrap text-[#FF2D20]">
                         <IconTextDecoration class="absolute top-2/3 left-0 h-[0.58em] w-full fill-[#FF2D20]/20" />
-                        <span class="relative">Lara4</span>
+                        <span class="relative">Cplanner</span>
                     </span>
                     <span class="text-[#FF2D20]"> - </span>
                     <VueTypewriterEffect :strings="typedStrings" :loop="true" :autoStart="true" />
@@ -93,9 +93,9 @@ const features = [
                 >
                     <span class="relative z-10">{{ $t('home.get_started') }}</span>
                 </Button>
-                
+
                 <Button
-                    href="https://github.com/abdessamadbettal/Lara4"
+                    href="https://github.com/abdessamadbettal/Cplanner"
                     class="px-8 py-3 text-lg"
                     variant="outline"
                     as="a"
@@ -107,7 +107,7 @@ const features = [
 
             <!-- Feature Indicators with SVG Icons -->
             <div class="mt-16 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-                <div v-for="(feature, index) in features" :key="index" 
+                <div v-for="(feature, index) in features" :key="index"
                      class="flex flex-col items-center transform transition-all duration-300 hover:scale-110">
                     <div :class="['w-14 h-14 flex items-center justify-center rounded-full p-3 mb-3', feature.bgColor]">
                         <img :src="feature.icon" :alt="feature.name" class="w-8 h-8 drop-shadow-sm">

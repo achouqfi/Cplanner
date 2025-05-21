@@ -34,14 +34,14 @@
 
         <!-- Background with subtle texture -->
         <rect x="5" y="10" width="270" height="70" fill="url(#subtle-pattern)" rx="8" class="backdrop" />
-        
+
         <!-- Code pattern lines for decoration with subtle motion -->
         <g class="code-lines">
             <line x1="8" y1="32" x2="272" y2="32" class="stroke-current opacity-5 code-line" stroke-width="0.5" />
             <line x1="8" y1="42" x2="272" y2="42" class="stroke-current opacity-5 code-line" stroke-width="0.5" />
             <line x1="8" y1="52" x2="272" y2="52" class="stroke-current opacity-5 code-line" stroke-width="0.5" />
         </g>
-        
+
         <!-- Main text with improved animations -->
         <g class="main-text">
             <text
@@ -61,7 +61,7 @@
             </text>
         </g>
 
-        <!-- Animated dots repositioned to be closer to Lara4 -->
+        <!-- Animated dots repositioned to be closer to Cplanner -->
         <g class="loading-dots">
             <circle cx="125" cy="52" r="2" class="fill-current dot dot-1" />
             <circle cx="133" cy="52" r="2" class="fill-current dot dot-2" />
@@ -111,15 +111,15 @@ function startTypewriterEffect() {
     let isTyping = true;
     let currentText = '';
     let currentPosition = 0;
-    
+
     typewriterInterval = setInterval(() => {
         const currentSlogan = slogans[currentSloganIndex];
-        
+
         if (isTyping) {
             // Typing phase
             currentText = currentSlogan.substring(0, currentPosition + 1);
             currentPosition++;
-            
+
             if (currentPosition >= currentSlogan.length) {
                 isTyping = false;
                 // Pause at the end of typing
@@ -132,14 +132,14 @@ function startTypewriterEffect() {
             // Erasing phase
             currentText = currentSlogan.substring(0, currentPosition);
             currentPosition--;
-            
+
             if (currentPosition < 0) {
                 isTyping = true;
                 currentPosition = 0;
                 currentSloganIndex = (currentSloganIndex + 1) % slogans.length;
             }
         }
-        
+
         if (tagNameElement) {
             tagNameElement.textContent = currentText;
         }
@@ -152,61 +152,61 @@ function startTypewriterEffect() {
 
 /* Enhanced animations with more natural easing */
 @keyframes slide-in {
-    0% { 
+    0% {
         opacity: 0;
         transform: translateX(-15px);
     }
-    100% { 
+    100% {
         opacity: 1;
         transform: translateX(0);
     }
 }
 
 @keyframes reveal {
-    0% { 
+    0% {
         opacity: 0;
         transform: translateY(10px);
     }
-    100% { 
+    100% {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
 @keyframes pulse {
-    0%, 100% { 
+    0%, 100% {
         opacity: 0.4;
         transform: scale(0.9);
     }
-    50% { 
+    50% {
         opacity: 1;
         transform: scale(1.2);
     }
 }
 
 @keyframes subtle-float {
-    0%, 100% { 
+    0%, 100% {
         transform: translateY(0);
     }
-    50% { 
+    50% {
         transform: translateY(-1.5px);
     }
 }
 
 @keyframes code-line-grow {
-    0% { 
+    0% {
         stroke-dashoffset: 280;
     }
-    100% { 
+    100% {
         stroke-dashoffset: 0;
     }
 }
 
 @keyframes fade-in {
-    0% { 
+    0% {
         opacity: 0;
     }
-    100% { 
+    100% {
         opacity: 0.03;
     }
 }
@@ -339,7 +339,7 @@ function startTypewriterEffect() {
     .logo-svg:hover {
         filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.5));
     }
-    
+
     .tag-name:hover {
         fill: #F87171;
     }

@@ -9,10 +9,10 @@
     <meta name="theme-color" content="#ffffff">
 
     <!-- Language Detection -->
-    <link rel="alternate" hreflang="x-default" href="https://lara4.com" />
-    <link rel="alternate" hreflang="en" href="https://lara4.com/en" />
-    <link rel="alternate" hreflang="fr" href="https://lara4.com/fr" />
-    <link rel="alternate" hreflang="es" href="https://lara4.com/es" />
+    <link rel="alternate" hreflang="x-default" href="https://Cplanner.com" />
+    <link rel="alternate" hreflang="en" href="https://Cplanner.com/en" />
+    <link rel="alternate" hreflang="fr" href="https://Cplanner.com/fr" />
+    <link rel="alternate" hreflang="es" href="https://Cplanner.com/es" />
 
     <title inertia>{{ config('app.name', 'Lara4') }}</title>
 
