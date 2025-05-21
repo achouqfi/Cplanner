@@ -1,7 +1,7 @@
 {
     "name": "Cplanner",
     "type": "project",
-    "description": "A Lara4 project with some pre-installed packages and configurations.",
+    "description": "A Cplanner project with some pre-installed packages and configurations.",
     "keywords": [
         "laravel",
         "starter",
@@ -12,7 +12,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/abdessamadbettal/Lara4.git"
+        "url": "https://github.com/achouqfi/Cplanner.git"
     },
     "require": {
         "php": "^8.2",
