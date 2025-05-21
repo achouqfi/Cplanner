@@ -2,7 +2,7 @@
     "name": "inertiajs-vue3-tailwindcss-vite",
     "private": true,
     "version": "1.0.0",
-    "description": "Lara4 kit with inertiajs, vue3, tailwindcss and vite and ssr && localization support",
+    "description": "Cplanner kit with inertiajs, vue3, tailwindcss and vite and ssr && localization support",
     "repository": {
         "type": "git",
         "url": "https://github.com/abdessamadbettal/Lara4"
