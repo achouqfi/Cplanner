@@ -1,7 +1,7 @@
 {
-    "name": "Cplanner",
+    "name": "achouqfi/cplanner",
     "type": "project",
-    "description": "A Cplanner project with some pre-installed packages and configurations.",
+    "description": "Cplanner – SaaS analytics dashboard using Laravel, Inertia.js, Vue 3, Tailwind CSS, and Vite with SSR & localization support.",
     "keywords": [
         "laravel",
         "starter",
