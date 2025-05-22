@@ -299,15 +299,16 @@ export default {
         },
         "home": {
             "welcome_to": "Welcome to",
-            "hero_description": "Simplify your Laravel development with Lara4! Build faster and smarter with tools like Inertia.js, Vue, multi-language support, SEO optimization, and Filament CMS—all ready to use. Start building today!",
+            "hero_description": "Track, analyze, and monitor traffic from all your websites in one place. Cplanner gives you real-time insights, historical data, and actionable analytics to grow smarter.",
             "get_started": "Get Started",
             "view_on_github": "View on GitHub",
             "features": "Features",
-            "blogs": "Blogs",
+            "blogs": "Blog",
+            "pricing": "Pricing",
             "documentation": "Documentation",
             "see_more_posts": "See more posts",
-            "latest_blogs": "Latest Blogs",
-            "latest_blogs_text": "Read the latest posts from our blog."
+            "latest_blogs": "Latest Blog Posts",
+            "latest_blogs_text": "Discover the latest insights on analytics, traffic growth, and digital performance."
         },
         "mail": {
             "about_us": "About us",

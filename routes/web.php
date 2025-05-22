@@ -22,10 +22,6 @@ Route::group(
         Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
         Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
 
-        // Route::Resource('posts', PostController::class);
-
-
-
         Route::get('/dashboard', function () {
             return Inertia::render('Dashboard');
         })->middleware(['auth', 'verified'])->name('dashboard');
