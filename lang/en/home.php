@@ -1,14 +1,14 @@
 <?php
 
 return [
-    'welcome_to' => 'Welcome to',
-    'hero_description' => 'Simplify your Laravel development with Cplanner! Build faster and smarter with tools like Inertia.js, Vue, multi-language support, SEO optimization, and Filament CMS—all ready to use. Start building today!',
+    'welcome_to' => 'Welcome toererer ',
+    'hero_description' => 'Analyze and monitor the performance of all your websites from a single dashboard. Cplanner gives you a complete view of traffic, sources, sessions, and real-time users.',
     'get_started' => 'Get Started',
     'view_on_github' => 'View on GitHub',
     'features' => 'Features',
-    'blogs' => 'Blogs',
+    'blogs' => 'Blog',
     'documentation' => 'Documentation',
     'see_more_posts' => 'See more posts',
-    'latest_blogs' => 'Latest Blogs',
-    'latest_blogs_text' => 'Read the latest posts from our blog.',
+    'latest_blogs' => 'Latest Blog Posts',
+    'latest_blogs_text' => 'Explore our latest articles on traffic analytics, web performance, and digital growth.',
 ];

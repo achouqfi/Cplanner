@@ -94,9 +94,9 @@ const headerClass = computed(() => [
 
             <!-- Right Side Actions -->
             <div class="flex items-center gap-3 md:gap-4">
-                <ThemeSwitcher class="transition-transform hover:scale-110" />
+                <ThemeSwitcher class="transition-transform" />
                 <LanguageSwitcher :locales="$page.props.locales" :currentLocale="$page.props.currentLocale"
-                    class="transition-transform hover:scale-110" />
+                    class="transition-transform " />
 
                 <!-- User Menu -->
                 <div class="hidden sm:flex sm:items-center" v-if="$page.props.auth.user">
