@@ -1,118 +1,100 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useIntersectionObserver } from '@vueuse/core';
 
-const stacks = [
-    {
-        name: 'Laravel',
-        description: 'Modern PHP Framework',
-        icon: 'https://cdn.simpleicons.org/laravel/FF2D20',
-        color: 'text-red-500',
-        bgColor: 'bg-red-50 dark:bg-red-900/20',
-        link: 'https://laravel.com'
-    },
-    {
-        name: 'Vue.js',
-        description: 'Progressive JS Framework',
-        icon: 'https://cdn.simpleicons.org/vuedotjs/4FC08D',
-        color: 'text-green-500',
-        bgColor: 'bg-green-50 dark:bg-green-900/20',
-        link: 'https://vuejs.org'
-    },
-    {
-        name: 'Inertia.js',
-        description: 'Modern Monolith Builder',
-        icon: 'https://cdn.simpleicons.org/inertia/9553E9',
-        color: 'text-purple-500',
-        bgColor: 'bg-purple-50 dark:bg-purple-900/20',
-        link: 'https://inertiajs.com'
-    },
-    {
-        name: 'Tailwind CSS',
-        description: 'Utility-First CSS',
-        icon: 'https://cdn.simpleicons.org/tailwindcss/06B6D4',
-        color: 'text-cyan-500',
-        bgColor: 'bg-cyan-50 dark:bg-cyan-900/20',
-        link: 'https://tailwindcss.com'
-    },
-    {
-        name: 'Filament',
-        description: 'Admin Panel & Forms',
-        icon: 'https://cdn.simpleicons.org/filament/EF3B2D',
-        color: 'text-indigo-500',
-        bgColor: 'bg-indigo-50 dark:bg-indigo-900/20',
-        link: 'https://filamentphp.com'
-    }
+const testimonials = [
+  {
+    name: 'Alex Tan',
+    title: 'Head of Growth @DataDock',
+    img: 'https://i.pravatar.cc/100?img=49',
+    quote:
+      'Switching to Cplanner was a game changer. The dashboard is clean, the data is real-time, and our team can finally focus on growth—without trading privacy for performance.',
+  },
+  {
+    name: 'Sophie Kim',
+    title: 'Digital Strategist @Pivotly',
+    img: 'https://i.pravatar.cc/100?img=12',
+    quote:
+      'Cplanner helped us simplify our analytics workflow. No more complex dashboards or data silos—everything we need is in one place, privacy-first.',
+  },
+  {
+    name: 'Mohammed A.',
+    title: 'Founder @TrackWise',
+    img: 'https://i.pravatar.cc/100?img=38',
+    quote:
+      'What sets Cplanner apart is the attention to user experience. It just works—fast, accurate, and ethical. Highly recommend it for any modern team.',
+  },
 ];
 
 const target = ref(null);
 const isVisible = ref(false);
 
 const { stop } = useIntersectionObserver(
-    target,
-    ([{ isIntersecting }]) => {
-        if (isIntersecting) {
-            isVisible.value = true;
-            stop();
-        }
-    },
-    { threshold: 0.1 }
+  target,
+  ([{ isIntersecting }]) => {
+    if (isIntersecting) {
+      isVisible.value = true;
+      stop();
+    }
+  },
+  { threshold: 0.2 }
 );
 </script>
 
 <template>
-    <section ref="target" class="py-24 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16"
-                 :class="[isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10']"
-                 style="transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1)">
-                <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent">
-                    Powered by Modern Stack
-                </h2>
-                <p class="text-lg text-gray-600 dark:text-gray-300">
-                    Built with cutting-edge technologies for optimal performance
-                </p>
-            </div>
+  <section
+    ref="target"
+    class="py-32 bg-gradient-to-b from-white via-gray-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative z-10"
+  >
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <!-- Title -->
+      <div
+        class="text-center mb-20 transition-all duration-1000 ease-out"
+        :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+      >
+        <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white">
+          Loved by teams who value speed, clarity, and privacy
+        </h2>
+        <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-300">
+          What professionals are saying about using Cplanner daily.
+        </p>
+      </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
-                <template v-for="(stack, index) in stacks" :key="stack.name">
-                    <a :href="stack.link" 
-                       target="_blank"
-                       :class="[
-                           'transform transition-all duration-500 hover:scale-105',
-                           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                       ]"
-                       :style="{ transitionDelay: `${index * 100}ms` }"
-                       class="group bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl border border-gray-100 dark:border-gray-700">
-                        <div class="flex flex-col items-center space-y-4">
-                            <div :class="['w-16 h-16 flex items-center justify-center rounded-full p-3 group-hover:scale-110 transition-transform duration-300', stack.bgColor]">
-                                <img :src="stack.icon" :alt="stack.name" class="w-10 h-10 drop-shadow-sm">
-                            </div>
-                            <h3 :class="['font-bold text-xl', stack.color]">
-                                {{ stack.name }}
-                            </h3>
-                            <p class="text-gray-600 dark:text-gray-300 text-center text-sm">
-                                {{ stack.description }}
-                            </p>
-                        </div>
-                    </a>
-                </template>
+      <!-- Grid of Testimonials -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div
+          v-for="(testimonial, index) in testimonials"
+          :key="testimonial.name"
+          class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-8 shadow-xl transition-all duration-700 hover:scale-[1.02]"
+          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+          :style="{ transitionDelay: `${index * 150}ms` }"
+        >
+          <blockquote class="text-gray-800 dark:text-gray-100 text-base leading-relaxed">
+            <svg
+              class="mb-4 w-8 h-8 text-blue-300 dark:text-blue-600"
+              fill="currentColor"
+              viewBox="0 0 32 32"
+              aria-hidden="true"
+            >
+              <path d="M10.6 16c-.3 1.8-1.2 3.2-2.6 4.2-1.4 1-3.1 1.5-5 1.5v-4.3c1.2 0 2.1-.3 2.8-.8.7-.5 1.1-1.1 1.3-2H0C0 6.9 1.9 2 5.8 0l2.1 3.4c-1.9 1-3.1 2.9-3.4 5.5h6.1V16z"/>
+            </svg>
+            {{ testimonial.quote }}
+          </blockquote>
+          <div class="flex items-center gap-4 mt-6">
+            <img :src="testimonial.img" alt="Avatar" class="w-12 h-12 rounded-full ring-2 ring-white dark:ring-gray-900 shadow" />
+            <div>
+              <p class="font-semibold text-gray-900 dark:text-white">{{ testimonial.name }}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">{{ testimonial.title }}</p>
             </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 </template>
 
 <style scoped>
-.scale-up-center {
-    animation: scale-up-center 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-@keyframes scale-up-center {
-    0% {
-        transform: scale(0.5);
-    }
-    100% {
-        transform: scale(1);
-    }
+html {
+  scroll-behavior: smooth;
 }
 </style>

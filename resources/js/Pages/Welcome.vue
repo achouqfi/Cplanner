@@ -1,7 +1,7 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import Hero from '@/Components/Home/Hero.vue';
-import Trusted from '@/Components/Home/Trusted.vue';
+import Pricing from '@/Components/Home/Pricing.vue';
 import BlogSection from '@/Components/Blog/BlogSection.vue';
 import GeneralLayout from '@/Layouts/GeneralLayout.vue';
 import StackSection from '@/Components/Home/StackSection.vue';
@@ -71,7 +71,7 @@ const descriptions = {
 
         <Hero />
         <StackSection />
-        <Trusted />
+        <Pricing />
         <BlogSection :posts="posts.data" v-if="posts.data.length > 0" />
     </GeneralLayout>
 </template>

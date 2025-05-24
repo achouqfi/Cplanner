@@ -43,6 +43,7 @@ class ProviderController extends Controller
      */
     public function handleProviderCallback(Request $request)
     {
+
         $providerValue = $request->provider;
 
         if (!in_array($providerValue, ['google', 'github'])) {
@@ -51,7 +52,7 @@ class ProviderController extends Controller
 
         $previousUrl = $request->session()->pull('previous_url', route('welcome'));
         $providerUser = Socialite::driver($providerValue)->stateless()->user();
-        
+
         try {
             DB::beginTransaction();
 
@@ -63,13 +64,13 @@ class ProviderController extends Controller
             if ($provider) {
                 $user = $provider->user;
             } else {
+
                 // Check if user exists with same email
                 $user = User::where('email', $providerUser->getEmail())->first();
 
                 if (!$user) {
                     $deviceInfo = (new User)->getDeviceInfo();
-                    
-                    // Create new user
+
                     $user = User::create([
                         'name' => $providerUser->getName(),
                         'email' => $providerUser->getEmail(),
@@ -100,7 +101,7 @@ class ProviderController extends Controller
                 if (!$user->avatar) {
                     $user->update(['avatar' => $providerUser->getAvatar()]);
                 }
-                
+
             }
 
             // Update location data
