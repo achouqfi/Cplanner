@@ -21,11 +21,22 @@ class PageView extends Model
         'country',
         'device',
         'ip_address',
-        'viewed_at'
+        'viewed_at',
+        'source',
+        'date',
+        'pageviews',
+        'sessions',
+        'users',
+        'bounce_rate',
+        'engagement_time',
+        'events',
+        'revenue',
     ];
+
 
     protected $casts = [
         'viewed_at' => 'datetime',
+        'date' => 'date', 
     ];
 
     public function website()

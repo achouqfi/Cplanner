@@ -9,7 +9,6 @@ class SeoIssue extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['website_id', 'page_id', 'type', 'message', 'detected_at'];
 
     protected $casts = [
         'detected_at' => 'datetime',

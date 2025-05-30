@@ -7,7 +7,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-
+use App\Http\Controllers\Auth\ProviderController;
+use App\Http\Controllers\WebsiteController;
+use App\Http\Controllers\AnalyticController;
 
 Route::group(
     [
@@ -17,8 +19,59 @@ Route::group(
     function () {
         Route::feeds();
 
-        Route::get('/', [HomeController::class, 'index'])->name('welcome');
+        Route::prefix('websites')->group(function () {
+            Route::get('/', [WebsiteController::class, 'index'])->name('website.connected');
+            Route::get('/access_websites', [WebsiteController::class, 'access_websites'])->name('website.connected');
+            Route::get('/analytics', [WebsiteController::class, 'fetchAnalytics'])->name('websites.analytics');
 
+            Route::post('/', [WebsiteController::class, 'addWebsite'])->name('website.addWebsite');
+            Route::delete('/{website}', [WebsiteController::class, 'destroy'])->name('website.remove');
+            Route::get('/connected', [WebsiteController::class, 'access_websites'])->name('website.connected');
+            Route::post('/{website}/track', [WebsiteController::class, 'track'])->name('website.track');
+            Route::get('/list', function () {
+                return Inertia::render('Websites/Index');
+            })->name('websites.index');
+        });
+
+
+        Route::prefix('realtime')->group(function () {
+            Route::get('/', function () {
+                return Inertia::render('Realtime/Index');
+            })->name('realtime.index');
+        });
+
+        Route::prefix('heatmaps')->group(function () {
+            Route::get('/', function () {
+                return Inertia::render('Heatmaps/Index');
+            })->name('heatmaps.index');
+        });
+
+        Route::prefix('analytics')->group(function () {
+            Route::get('/pages-analytics', [AnalyticController::class, 'PageAnalytics'])->name('websites.pages.analytics');
+            Route::get('/', function () {
+                return Inertia::render('Analytics/Index');
+            })->name('analytics.index');
+        });
+
+        Route::prefix('seo')->group(function () {
+            Route::get('/', function () {
+                return Inertia::render('SEO/Index');
+            })->name('seo.index');
+        });
+
+        Route::prefix('keywords')->group(function () {
+            Route::get('/', function () {
+                return Inertia::render('Keywords/Index');
+            })->name('keywords.index');
+        });
+
+        Route::prefix('settings')->group(function () {
+            Route::get('/', function () {
+                return Inertia::render('Settings/Index');
+            })->name('settings.index');
+        });
+
+        Route::get('/', [HomeController::class, 'index'])->name('welcome');
         Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
         Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
 

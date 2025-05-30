@@ -68,10 +68,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Link to users table
             $table->string('provider'); // e.g., 'google', 'github'
             $table->string('provider_id'); // Provider's unique user ID
-            $table->string('provider_token')->nullable(); // Optional: Store access token
+            $table->longText('provider_token')->nullable(); // Optional: Store access token
+            $table->longText('refresh_token')->nullable(); // Optional: Store access token
             $table->string('avatar')->nullable(); // Store provider avatar if available
             $table->string('name')->nullable(); // Store user name if available
             $table->string('nickname')->nullable(); // Store user nickname if available
+            $table->json('properties')->nullable(); // Store user nickname if available
             $table->string('token')->nullable(); // Store user token if available
             $table->timestamps();
 

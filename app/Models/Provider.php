@@ -21,7 +21,10 @@ class Provider extends Model
         'provider_id',
         'provider_token',
         'avatar',
+        'refresh_token',
+        'properties',
         'name',
+        'disabled',
         'nickname',
         'token',
     ];

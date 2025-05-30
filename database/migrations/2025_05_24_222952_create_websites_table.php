@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('is_verified')->default(false);
             $table->boolean('is_active')->default(false);
             $table->string('tracking_id')->unique();
+            $table->boolean('disabled')->default(false);
             $table->timestamps();
         });
     }

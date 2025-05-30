@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CPlanner Project Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <div class="max-w-5xl mx-auto p-8">
+    <h1 class="text-3xl font-bold mb-4">📌 CPlanner Project Dashboard</h1>
+    <p class="mb-6 text-sm text-gray-600">Start Date: <strong>Today</strong> | Sprint Cycle: <strong>Weekly (Deploy Every Sunday)</strong> | Status: <span class="text-green-600 font-semibold">Active</span></p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Sprint 1 -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-2">🚀 Sprint 1: Core Setup (Week 1)</h2>
+        <p class="text-sm text-gray-500 mb-4">Deadline: Sunday </p>
+        <ul class="space-y-2 text-sm">
+          <li>✅ Setup Laravel + Vue 3 project with Tailwind</li>
+          <li>✅ Google OAuth integration for GA4</li>
+          <li>🔧 Create database structure: websites, analytics_snapshots, seo_issues</li>
+          <li>🔧 Command to fetch GA4 page metrics</li>
+          <li>📝 Build UI: Website List + Page Analytics Table</li>
+        </ul>
+      </div>
+
+      <!-- Sprint 2 -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-2">📈 Sprint 2: Analytics Insights (Week 2)</h2>
+        <p class="text-sm text-gray-500 mb-4">Deadline: +7 days</p>
+        <ul class="space-y-2 text-sm">
+          <li>🔧 Store and summarize GA4 metrics (sessions, bounce, avg time)</li>
+          <li>🔧 Add date filters (today, week, month)</li>
+          <li>🔧 Add traffic source grouping (Google, Facebook, Direct...)</li>
+          <li>🧠 AI Assistant: basic traffic summary (GPT)</li>
+          <li>📝 UI enhancements: quick stats + trend arrows</li>
+        </ul>
+      </div>
+
+      <!-- Sprint 3 -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-2">🔍 Sprint 3: SEO Engine (Week 3)</h2>
+        <p class="text-sm text-gray-500 mb-4">Deadline: +14 days</p>
+        <ul class="space-y-2 text-sm">
+          <li>🔧 Implement crawler: fetch title, meta, h1, links</li>
+          <li>🧠 Detect issues: missing title/meta, duplicate H1, slow pages</li>
+          <li>🔧 Store issues in `seo_issues` table</li>
+          <li>📝 UI: per page SEO score + top issues</li>
+        </ul>
+      </div>
+
+      <!-- Sprint 4 -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-2">🔗 Sprint 4: Backlink & Keywords (Week 4)</h2>
+        <p class="text-sm text-gray-500 mb-4">Deadline: +21 days</p>
+        <ul class="space-y-2 text-sm">
+          <li>🔧 Command: crawl backlinks via Ahrefs/SEMrush API or custom scraper</li>
+          <li>🔧 Command: fetch ranking keywords per page</li>
+          <li>📝 UI: link performance metrics (DA, anchor, pages)</li>
+          <li>📝 Keyword insights dashboard</li>
+        </ul>
+      </div>
+
+      <!-- Sprint 5 -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-2">📊 Sprint 5: Full Dashboard & Real-Time</h2>
+        <p class="text-sm text-gray-500 mb-4">Deadline: +28 days</p>
+        <ul class="space-y-2 text-sm">
+          <li>✅ Real-time panel: active users on page (GA streaming)</li>
+          <li>🔧 Real-time traffic source + device type</li>
+          <li>📝 Deploy final layout with widgets and filters</li>
+          <li>🧠 GPT Summary: daily/weekly traffic drop insights</li>
+        </ul>
+      </div>
+
+      <!-- Sprint 6 -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-2">🧪 Sprint 6: QA + Subscription Model</h2>
+        <p class="text-sm text-gray-500 mb-4">Deadline: +35 days</p>
+        <ul class="space-y-2 text-sm">
+          <li>✅ Setup Inertia Tests + Browser tests (Cypress/Pest)</li>
+          <li>💳 Add Stripe integration + plan limits</li>
+          <li>🔐 Add middleware + usage limits per plan</li>
+          <li>📦 Deploy v1 to production</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -9,7 +9,7 @@ class Website extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'name', 'domain', 'tracking_code'];
+    protected $fillable = ['user_id', 'name', 'domain', 'disabled', 'tracking_id', 'is_active', 'is_verified'];
 
     public function pages()
     {
