@@ -18,32 +18,15 @@
             </div>
         </template>
 
-        <div class="space-y-6">
-            <!-- Controls -->
-            <div class="bg-white rounded-lg p-4 border border-gray-100">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <select v-model="selectedSite"
-                        class="px-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-transparent">
-                        <option disabled value="null">Select website</option>
-                        <option v-for="site in trackedWebsites" :key="site.id" :value="site">
-                            {{ site.domain }}
-                        </option>
-                    </select>
+        <div v-if="loading" class="flex justify-center py-32">
+            <svg class="animate-spin h-8 w-8 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+            </svg>
+        </div>
 
-                    <div class="flex gap-1 p-1 bg-gray-50 rounded-lg">
-                        <button v-for="range in timeRanges" :key="range.value" @click="selectedTimeRange = range.value"
-                            :class="[
-                                'px-3 py-1.5 text-sm rounded-md transition-all',
-                                selectedTimeRange === range.value
-                                    ? 'bg-white text-gray-900 shadow-sm'
-                                    : 'text-gray-500 hover:text-gray-700'
-                            ]">
-                            {{ range.label }}
-                        </button>
-                    </div>
-                </div>
-            </div>
-
+        <div v-else class="space-y-6">
             <!-- Website Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div v-for="site in trackedWebsites" :key="site.id" @click="selectedSite = site"
@@ -250,6 +233,452 @@
                                 <div class="w-full bg-gray-100 rounded-full h-1.5">
                                     <div class="bg-blue-600 h-1.5 rounded-full transition-all duration-500"
                                         :style="{ width: `${(top.views / selectedSite.traffic?.topPages[0].views) * 100}%` }">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Sources and Pages -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Traffic Sources -->
+                    <div class="bg-white rounded-lg p-6 border border-gray-100">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-medium text-gray-900">Traffic Source</h3>
+                            <button @click="goToAllTrafficSource(selectedSite.id)"
+                                class="text-sm text-blue-600 hover:underline hover:text-blue-800 transition-colors underline">
+                                View All
+                            </button>
+                        </div>
+                        <div class="space-y-3">
+                            <div v-for="([source, value], index) in Object.entries(selectedSite.traffic?.sources || {}).slice(0, 5)"
+                                :key="source" class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center">
+                                        <i :class="getSourceIcon(source)" class="text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">{{ source }}</p>
+                                        <p class="text-xs text-gray-500">{{ getPercentage(value,
+                                            selectedSite.traffic?.total_sessions) }}%</p>
+                                    </div>
+                                </div>
+                                <p class="text-sm font-medium text-gray-900">{{ value.toLocaleString() }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Top Pages -->
+                    <div class="bg-white rounded-lg p-6 border border-gray-100">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-medium text-gray-900">Top Pages</h3>
+                            <button @click="goToAllPages(selectedSite.id)"
+                                class="text-sm text-blue-600 hover:underline hover:text-blue-800 transition-colors underline">
+                                View All
+                            </button>
+                        </div>
+                        <div class="space-y-3">
+                            <div v-for="(top, index) in selectedSite.traffic?.topPages.slice(0, 5)" :key="index">
+                                <div class="flex justify-between items-center mb-1">
+                                    <p class="text-sm text-gray-700 truncate pr-2" :title="top.page">
+                                        {{ top.page }}
+                                    </p>
+                                    <span class="text-sm font-medium text-gray-900">{{ top.views }}</span>
+                                </div>
+                                <div class="w-full bg-gray-100 rounded-full h-1.5">
+                                    <div class="bg-blue-600 h-1.5 rounded-full transition-all duration-500"
+                                        :style="{ width: `${(top.views / selectedSite.traffic?.topPages[0].views) * 100}%` }">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Performance Metrics Card -->
+                    <div class="bg-white rounded-lg p-6 border border-gray-100">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-medium text-gray-900">Performance Metrics</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
+                                Grade {{ selectedSite.domainPerformance?.gtmetrix_grade || 'N/A' }}
+                            </span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Performance Score -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Performance Score</p>
+                                        <p class="text-xs text-gray-500">Overall site speed</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-lg font-semibold text-gray-900">
+                                        {{ selectedSite.domainPerformance?.performance_score?.toFixed(0) || 0 }}/100
+                                    </p>
+                                    <div class="w-16 bg-gray-200 rounded-full h-1.5 mt-1">
+                                        <div class="bg-gray-900 h-1.5 rounded-full transition-all duration-500"
+                                            :style="{ width: `${selectedSite.domainPerformance?.performance_score || 0}%` }">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Load Time -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Load Time</p>
+                                        <p class="text-xs text-gray-500">Time to first byte</p>
+                                    </div>
+                                </div>
+                                <p class="text-lg font-semibold text-gray-900">
+                                    {{ selectedSite.domainPerformance?.load_time_seconds || 0 }}s
+                                </p>
+                            </div>
+
+                            <!-- Content Size -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Content Size</p>
+                                        <p class="text-xs text-gray-500">Total page weight</p>
+                                    </div>
+                                </div>
+                                <p class="text-lg font-semibold text-gray-900">
+                                    {{ formatBytes(selectedSite.domainPerformance?.content_length) }}
+                                </p>
+                            </div>
+
+                            <!-- Structure Score -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Structure Score</p>
+                                        <p class="text-xs text-gray-500">HTML structure quality</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-lg font-semibold text-gray-900">
+                                        {{ selectedSite.domainPerformance?.structure_score?.toFixed(0) || 0 }}/100
+                                    </p>
+                                    <div class="w-16 bg-gray-200 rounded-full h-1.5 mt-1">
+                                        <div class="bg-gray-900 h-1.5 rounded-full transition-all duration-500"
+                                            :style="{ width: `${selectedSite.domainPerformance?.structure_score || 0}%` }">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Web Vitals Card -->
+                    <div class="bg-white rounded-lg p-6 border border-gray-100">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-medium text-gray-900">Core Web Vitals</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
+                                Google Metrics
+                            </span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Largest Contentful Paint -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xs font-bold text-gray-600">LCP</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Largest Contentful Paint</p>
+                                        <p class="text-xs text-gray-500">Loading performance</p>
+                                    </div>
+                                </div>
+                                <p class="text-lg font-semibold text-gray-900">
+                                    {{ selectedSite.domainPerformance?.web_vitals?.largest_contentful_paint || 'N/A' }}
+                                </p>
+                            </div>
+
+                            <!-- Total Blocking Time -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xs font-bold text-gray-600">TBT</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Total Blocking Time</p>
+                                        <p class="text-xs text-gray-500">Interactivity delay</p>
+                                    </div>
+                                </div>
+                                <p class="text-lg font-semibold text-gray-900">
+                                    {{ selectedSite.domainPerformance?.web_vitals?.total_blocking_time || 'N/A' }}
+                                </p>
+                            </div>
+
+                            <!-- Cumulative Layout Shift -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xs font-bold text-gray-600">CLS</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Cumulative Layout Shift</p>
+                                        <p class="text-xs text-gray-500">Visual stability</p>
+                                    </div>
+                                </div>
+                                <p class="text-lg font-semibold text-gray-900">
+                                    {{ selectedSite.domainPerformance?.web_vitals?.cumulative_layout_shift || 'N/A' }}
+                                </p>
+                            </div>
+
+                            <!-- Readability Score -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Readability Score</p>
+                                        <p class="text-xs text-gray-500">Content clarity</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-lg font-semibold text-gray-900">
+                                        {{ selectedSite.domainPerformance?.readability_score?.toFixed(1) || 0 }}/10
+                                    </p>
+                                    <div class="w-16 bg-gray-200 rounded-full h-1.5 mt-1">
+                                        <div class="bg-gray-900 h-1.5 rounded-full transition-all duration-500"
+                                            :style="{ width: `${(selectedSite.domainPerformance?.readability_score || 0) * 10}%` }">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Technology Stack Card -->
+                    <div class="bg-white rounded-lg p-6 border border-gray-100">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-medium text-gray-900">Technology Stack</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
+                                Detected
+                            </span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- CMS -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Content Management</p>
+                                        <p class="text-xs text-gray-500">Platform detected</p>
+                                    </div>
+                                </div>
+                                <p class="text-sm font-medium text-gray-900">
+                                    {{ selectedSite.domainPerformance?.technologies?.cms || 'Unknown' }}
+                                </p>
+                            </div>
+
+                            <!-- Theme -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h4a2 2 0 002-2V9a2 2 0 00-2-2H7a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Theme</p>
+                                        <p class="text-xs text-gray-500">Design framework</p>
+                                    </div>
+                                </div>
+                                <p class="text-sm font-medium text-gray-900">
+                                    {{ selectedSite.domainPerformance?.technologies?.theme || 'Unknown' }}
+                                </p>
+                            </div>
+
+                            <!-- Server -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Server</p>
+                                        <p class="text-xs text-gray-500">Hosting infrastructure</p>
+                                    </div>
+                                </div>
+                                <p class="text-sm font-medium text-gray-900">
+                                    {{ selectedSite.domainPerformance?.technologies?.server || 'Unknown' }}
+                                </p>
+                            </div>
+
+                            <!-- Analytics -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Analytics</p>
+                                        <p class="text-xs text-gray-500">Tracking tools</p>
+                                    </div>
+                                </div>
+                                <p class="text-sm font-medium text-gray-900">
+                                    {{ selectedSite.domainPerformance?.technologies?.analytics?.join(', ') || 'None' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Site Elements Card -->
+                    <div class="bg-white rounded-lg p-6 border border-gray-100">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-medium text-gray-900">Site Elements</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
+                                HTML Analysis
+                            </span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Images -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Images</p>
+                                        <p class="text-xs text-gray-500">Total image count</p>
+                                    </div>
+                                </div>
+                                <p class="text-lg font-semibold text-gray-900">
+                                    {{ selectedSite.domainPerformance?.html_elements?.images || 0 }}
+                                </p>
+                            </div>
+
+                            <!-- Scripts -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Scripts</p>
+                                        <p class="text-xs text-gray-500">JavaScript files</p>
+                                    </div>
+                                </div>
+                                <p class="text-lg font-semibold text-gray-900">
+                                    {{ selectedSite.domainPerformance?.html_elements?.scripts || 0 }}
+                                </p>
+                            </div>
+
+                            <!-- Links -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Links</p>
+                                        <p class="text-xs text-gray-500">Internal & external</p>
+                                    </div>
+                                </div>
+                                <p class="text-lg font-semibold text-gray-900">
+                                    {{ selectedSite.domainPerformance?.html_elements?.links || 0 }}
+                                </p>
+                            </div>
+
+                            <!-- Performance Summary -->
+                            <div class="pt-2 border-t border-gray-100">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900">Overall Health</p>
+                                            <p class="text-xs text-gray-500">Performance rating</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium"
+                                            :class="getHealthColor(selectedSite.domainPerformance?.performance_score)">
+                                            {{ getHealthStatus(selectedSite.domainPerformance?.performance_score) }}
+                                        </p>
+                                        <p class="text-xs text-gray-500">
+                                            {{ selectedSite.domainPerformance?.performance_score?.toFixed(0) || 0 }}/100
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -506,6 +935,31 @@ watch(selectedSite, async (newSite) => {
         chartDataLoading.value = false;
     }
 });
+
+const formatBytes = (bytes) => {
+    if (!bytes) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+};
+
+const getHealthStatus = (score) => {
+    if (!score) return 'Unknown';
+    if (score >= 90) return 'Excellent';
+    if (score >= 75) return 'Good';
+    if (score >= 50) return 'Fair';
+    return 'Needs Work';
+};
+
+const getHealthColor = (score) => {
+    if (!score) return 'text-gray-500';
+    if (score >= 90) return 'text-green-600';
+    if (score >= 75) return 'text-blue-600';
+    if (score >= 50) return 'text-yellow-600';
+    return 'text-red-600';
+};
+
 
 onMounted(fetchTrackedWebsites);
 </script>

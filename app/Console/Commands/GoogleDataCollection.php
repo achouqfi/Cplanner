@@ -49,6 +49,7 @@ class GoogleDataCollection extends Command
                 // ANALYTICS DATA
                 $analytics = $google->getDetailedPagesAnalytics($propertyId, $startDate, $endDate);
 
+
                 foreach ($analytics['rows'] ?? [] as $row) {
                     $page = PageView::updateOrCreate([
                         'website_id' => $site->id,

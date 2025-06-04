@@ -7,7 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use App\Http\Controllers\Auth\ProviderController;
+use App\Http\Controllers\SeoIndexationController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\AnalyticController;
 
@@ -54,6 +54,10 @@ Route::group(
         });
 
         Route::prefix('seo')->group(function () {
+            Route::get('/', [SeoIndexationController::class, 'index'])->name('seo.index');
+            Route::get('/path-indexation', [SeoIndexationController::class, 'indexation'])->name('seo.indexation');
+            Route::get('/report/{id}', [SeoIndexationController::class, 'report'])->name('seo.report');
+            Route::get('/recommendations/{id}', [SeoIndexationController::class, 'suggestions'])->name('seo.suggestions');
             Route::get('/', function () {
                 return Inertia::render('SEO/Index');
             })->name('seo.index');
@@ -69,6 +73,12 @@ Route::group(
             Route::get('/', function () {
                 return Inertia::render('Settings/Index');
             })->name('settings.index');
+        });
+
+        Route::prefix('paths')->group(function () {
+            Route::get('/', function () {
+                return Inertia::render('Paths/Index');
+            })->name('paths.index');
         });
 
         Route::get('/', [HomeController::class, 'index'])->name('welcome');

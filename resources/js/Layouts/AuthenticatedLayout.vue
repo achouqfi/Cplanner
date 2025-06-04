@@ -11,12 +11,12 @@ const isDarkMode = ref(false);
 const navigation = [
     {
         name: 'Dashboard',
-        route: '/dashboard',
+        route: 'dashboard',
         icon: 'M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z'
     },
     {
         name: 'Websites',
-        route: 'websites/list',
+        route: 'websites.index',
         icon: 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9'
     },
     {
@@ -98,7 +98,7 @@ const getCurrentPageDescription = () => {
 
                 <!-- Navigation -->
                 <nav class="flex-1 px-4 py-6 space-y-1">
-                    <Link v-for="item in navigation" :key="item.route" :href="item.route" :class="[
+                    <Link v-for="item in navigation" :key="item.route" :href="route(item.route)" :class="[
                         'flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 group',
                         route().current(item.route)
                             ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'

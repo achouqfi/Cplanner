@@ -6,6 +6,9 @@ use App\Http\Requests\UpdateWebsiteRequest;
 use App\Models\Website;
 use Illuminate\Http\Request;
 use App\Services\GoogleService;
+use App\Services\LinkPerformanceService;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class WebsiteController extends Controller
 {
@@ -134,138 +137,153 @@ class WebsiteController extends Controller
     }
 
 
+
     public function index()
     {
         $user = auth()->user();
-        $provider = $user->providers()->where('provider', 'google')->first();
+        $cacheKey = "analytics:user:{$user->id}";
 
-        if (!$provider || !$provider->provider_token) {
-            return response()->json(['error' => 'Google account not connected.'], 403);
-        }
+        return Cache::remember($cacheKey, now()->addHours(3), function () use ($user) {
+            $provider = $user->providers()->where('provider', 'google')->first();
 
-        $google = new GoogleService([
-            'provider_token' => $provider->provider_token,
-            'refresh_token' => $provider->refresh_token,
-        ]);
-
-        $startDate = now()->subDays(30)->toDateString();
-        $endDate = now()->toDateString();
-
-        $websites = Website::where('user_id', $user->id)
-            ->where('disabled', false)
-            ->get(['id', 'name', 'domain', 'created_at']);
-
-        $enrichedWebsites = $websites->map(function ($site) use ($google, $startDate, $endDate, $provider) {
-            $seoStats = [
-                'clicks' => 0,
-                'impressions' => 0,
-                'avg_ctr' => '0%',
-                'avg_position' => 0,
-                'daily' => [],
-            ];
-
-            $trafficStats = [
-                'total_sessions' => 0,
-                'sources' => [],
-                'daily' => [],
-            ];
-
-            try {
-                $searchData = $google->getSearchAnalytics($site->domain, $startDate, $endDate);
-                $rows = collect($searchData->getRows() ?? []);
-
-                $groupedByDate = $rows->groupBy(fn($row) => $row->getKeys()[0]);
-
-                $seoStats['daily'] = $groupedByDate->map(function ($group) {
-                    $clicks = collect($group)->sum(fn($r) => $r->getClicks());
-                    $impressions = collect($group)->sum(fn($r) => $r->getImpressions());
-                    $ctr = collect($group)->avg(fn($r) => $r->getCtr()) * 100;
-                    $position = collect($group)->avg(fn($r) => $r->getPosition());
-                    return [
-                        'clicks' => $clicks,
-                        'impressions' => $impressions,
-                        'avg_ctr' => round($ctr, 2) . '%',
-                        'avg_position' => round($position, 2),
-                    ];
-                });
-
-                $aggregated = $rows->reduce(function ($carry, $row) {
-                    $carry['clicks'] += $row->getClicks();
-                    $carry['impressions'] += $row->getImpressions();
-                    $carry['ctr'] += $row->getCtr();
-                    $carry['position'] += $row->getPosition();
-                    $carry['count']++;
-                    return $carry;
-                }, ['clicks' => 0, 'impressions' => 0, 'ctr' => 0, 'position' => 0, 'count' => 0]);
-
-                if ($aggregated['count']) {
-                    $seoStats['clicks'] = $aggregated['clicks'];
-                    $seoStats['impressions'] = $aggregated['impressions'];
-                    $seoStats['avg_ctr'] = round(($aggregated['ctr'] / $aggregated['count']) * 100, 2) . '%';
-                    $seoStats['avg_position'] = round($aggregated['position'] / $aggregated['count'], 2);
-                }
-            } catch (\Exception $e) {
+            if (!$provider || !$provider->provider_token) {
+                return response()->json(['error' => 'Google account not connected.'], 403);
             }
 
-            try {
-                $properties = json_decode($provider->properties, true);
-                $matching = collect($properties)->first(function ($property) use ($site) {
-                    return str_contains(strtolower($property['displayName']), parse_url($site->domain, PHP_URL_HOST));
-                });
+            $google = new GoogleService([
+                'provider_token' => $provider->provider_token,
+                'refresh_token' => $provider->refresh_token,
+            ]);
 
-                if ($matching) {
-                    $propertyId = str_replace('properties/', '', $matching['name']);
+            $startDate = now()->subDays(30)->toDateString();
+            $endDate = now()->toDateString();
 
-                    // Source breakdown
-                    $report = $google->getAnalyticsReport($propertyId, $startDate, $endDate);
-                    $rows = collect($report->json('rows', []));
-                    $trafficStats['sources'] = $rows->mapWithKeys(fn($row) => [
-                        $row['dimensionValues'][0]['value'] => (int) $row['metricValues'][0]['value']
-                    ]);
-                    $trafficStats['total_sessions'] = $trafficStats['sources']->sum();
+            $websites = Website::where('user_id', $user->id)
+                ->where('disabled', false)
+                ->get(['id', 'name', 'domain', 'created_at']);
 
-                    // Daily traffic breakdown
-                    $dailyReport = $google->getDailyAnalyticsReport($propertyId, $startDate, $endDate);
-                    $dailyRows = collect($dailyReport->json('rows', []));
+            $enrichedWebsites = $websites->map(function ($site) use ($google, $startDate, $endDate, $provider) {
+                $seoStats = [
+                    'clicks' => 0,
+                    'impressions' => 0,
+                    'avg_ctr' => '0%',
+                    'avg_position' => 0,
+                    'daily' => [],
+                ];
 
-                    $trafficStats['daily'] = $dailyRows->mapWithKeys(fn($row) => [
-                        $row['dimensionValues'][0]['value'] => (int) $row['metricValues'][0]['value']
-                    ]);
+                $trafficStats = [
+                    'total_sessions' => 0,
+                    'sources' => [],
+                    'daily' => [],
+                    'topPages' => [],
+                ];
 
+                // --- SEO via Google Search Console
+                try {
+                    $searchData = $google->getSearchAnalytics($site->domain, $startDate, $endDate);
+                    $rows = collect($searchData->getRows() ?? []);
 
-                    //top pages
-                    $getTopPages = $google->getTopPages($propertyId, $startDate, $endDate);
-                    $topPagesRows = collect($getTopPages->json('rows', []));
+                    $groupedByDate = $rows->groupBy(fn($row) => $row->getKeys()[0]);
 
-                    $trafficStats['topPages'] = $topPagesRows->map(function ($row) {
+                    $seoStats['daily'] = $groupedByDate->map(function ($group) {
+                        $clicks = collect($group)->sum(fn($r) => $r->getClicks());
+                        $impressions = collect($group)->sum(fn($r) => $r->getImpressions());
+                        $ctr = collect($group)->avg(fn($r) => $r->getCtr()) * 100;
+                        $position = collect($group)->avg(fn($r) => $r->getPosition());
+
                         return [
-                            'page' => $row['dimensionValues'][0]['value'],
-                            'views' => (int) $row['metricValues'][0]['value'],
+                            'clicks' => $clicks,
+                            'impressions' => $impressions,
+                            'avg_ctr' => round($ctr, 2) . '%',
+                            'avg_position' => round($position, 2),
                         ];
                     });
+
+                    $aggregated = $rows->reduce(function ($carry, $row) {
+                        $carry['clicks'] += $row->getClicks();
+                        $carry['impressions'] += $row->getImpressions();
+                        $carry['ctr'] += $row->getCtr();
+                        $carry['position'] += $row->getPosition();
+                        $carry['count']++;
+                        return $carry;
+                    }, ['clicks' => 0, 'impressions' => 0, 'ctr' => 0, 'position' => 0, 'count' => 0]);
+
+                    if ($aggregated['count']) {
+                        $seoStats['clicks'] = $aggregated['clicks'];
+                        $seoStats['impressions'] = $aggregated['impressions'];
+                        $seoStats['avg_ctr'] = round(($aggregated['ctr'] / $aggregated['count']) * 100, 2) . '%';
+                        $seoStats['avg_position'] = round($aggregated['position'] / $aggregated['count'], 2);
+                    }
+                } catch (\Exception $e) {
+                    Log::warning("GSC error for site {$site->domain}: " . $e->getMessage());
                 }
-            } catch (\Exception $e) {
-                $trafficStats['error'] = 'Failed to fetch GA4 data';
-            }
+
+                // --- Traffic via Google Analytics
+                try {
+                    $properties = json_decode($provider->properties, true);
+                    $matching = collect($properties)->first(function ($property) use ($site) {
+                        return str_contains(strtolower($property['displayName']), parse_url($site->domain, PHP_URL_HOST));
+                    });
+
+                    if ($matching) {
+                        $propertyId = str_replace('properties/', '', $matching['name']);
+
+                        // Sessions by source
+                        $report = $google->getAnalyticsReport($propertyId, $startDate, $endDate);
+                        $rows = collect($report->json('rows', []));
+
+                        $trafficStats['sources'] = $rows->mapWithKeys(fn($row) => [
+                            $row['dimensionValues'][0]['value'] => (int) $row['metricValues'][0]['value']
+                        ]);
+
+                        $trafficStats['total_sessions'] = $trafficStats['sources']->sum();
+
+                        // Sessions by day
+                        $dailyReport = $google->getDailyAnalyticsReport($propertyId, $startDate, $endDate);
+                        $dailyRows = collect($dailyReport->json('rows', []));
+
+                        $trafficStats['daily'] = $dailyRows->mapWithKeys(fn($row) => [
+                            $row['dimensionValues'][0]['value'] => (int) $row['metricValues'][0]['value']
+                        ]);
+
+                        // Top pages
+                        $getTopPages = $google->getTopPages($propertyId, $startDate, $endDate);
+                        $topPagesRows = collect($getTopPages->json('rows', []));
+
+                        $trafficStats['topPages'] = $topPagesRows->map(function ($row) {
+                            return [
+                                'page' => $row['dimensionValues'][0]['value'],
+                                'views' => (int) $row['metricValues'][0]['value'],
+                            ];
+                        });
+                    }
+                } catch (\Exception $e) {
+                    Log::warning("GA4 error for site {$site->domain}: " . $e->getMessage());
+                    $trafficStats['error'] = 'Failed to fetch GA4 data';
+                }
+
+                $performance = new LinkPerformanceService;
+
+                return [
+                    'id' => $site->id,
+                    'name' => $site->name,
+                    'domain' => $site->domain,
+                    'domainPerformance' => $performance->analyze($site->domain),
+                    'created_at' => $site->created_at,
+                    'seo' => $seoStats,
+                    'traffic' => $trafficStats,
+                ];
+            });
 
             return [
-                'id' => $site->id,
-                'name' => $site->name,
-                'domain' => $site->domain,
-                'created_at' => $site->created_at,
-                'seo' => $seoStats,
-                'traffic' => $trafficStats,
+                'websites' => $enrichedWebsites,
+                'summary' => [
+                    'total_sites' => $websites->count(),
+                    'total_clicks' => $enrichedWebsites->sum(fn($w) => $w['seo']['clicks']),
+                    'total_sessions' => $enrichedWebsites->sum(fn($w) => $w['traffic']['total_sessions'] ?? 0),
+                ]
             ];
         });
-
-        return response()->json([
-            'websites' => $enrichedWebsites,
-            'summary' => [
-                'total_sites' => $websites->count(),
-                'total_clicks' => $enrichedWebsites->sum(fn($w) => $w['seo']['clicks']),
-                'total_sessions' => $enrichedWebsites->sum(fn($w) => $w['traffic']['total_sessions'] ?? 0),
-            ]
-        ]);
     }
 
 

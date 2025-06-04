@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc46b1ce7d85ac3dd53b2204b76d85fa",
+    "content-hash": "189c423fc48d5960597210fca19cf172",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -5808,16 +5808,16 @@
         },
         {
             "name": "opcodesio/log-viewer",
-            "version": "v3.15.0",
+            "version": "v3.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opcodesio/log-viewer.git",
-                "reference": "927c2ab872a4b1ee2eb213051c847f53539e6c92"
+                "reference": "871b7ac2adf8e623b3145e438fb2a2fdc0f8476c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opcodesio/log-viewer/zipball/927c2ab872a4b1ee2eb213051c847f53539e6c92",
-                "reference": "927c2ab872a4b1ee2eb213051c847f53539e6c92",
+                "url": "https://api.github.com/repos/opcodesio/log-viewer/zipball/871b7ac2adf8e623b3145e438fb2a2fdc0f8476c",
+                "reference": "871b7ac2adf8e623b3145e438fb2a2fdc0f8476c",
                 "shasum": ""
             },
             "require": {
@@ -5880,7 +5880,7 @@
             ],
             "support": {
                 "issues": "https://github.com/opcodesio/log-viewer/issues",
-                "source": "https://github.com/opcodesio/log-viewer/tree/v3.15.0"
+                "source": "https://github.com/opcodesio/log-viewer/tree/v3.17.1"
             },
             "funding": [
                 {
@@ -5892,7 +5892,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-20T10:47:36+00:00"
+            "time": "2025-05-19T09:20:51+00:00"
         },
         {
             "name": "opcodesio/mail-parser",

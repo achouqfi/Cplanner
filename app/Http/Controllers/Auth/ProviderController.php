@@ -68,9 +68,8 @@ class ProviderController extends Controller
             ->where('provider_id', $providerUser->getId())
             ->first();
 
-        if ($provider) {
-            $user = $provider->user;
-        } else {
+
+
             // Check if user exists with same email
             $user = User::where('email', $providerUser->getEmail())->first();
 
@@ -100,7 +99,9 @@ class ProviderController extends Controller
             $accounts = $google->getAccounts();
             $sites = $google->getWebmasterSites();
 
+
             foreach ($sites as $site) {
+
                 $url = $site->getSiteUrl();
                 $permission = $site->getPermissionLevel();
 
@@ -126,6 +127,7 @@ class ProviderController extends Controller
             }
 
 
+
             $provider = Provider::updateOrCreate(
                 [
                     'provider' => $providerValue,
@@ -143,10 +145,11 @@ class ProviderController extends Controller
             );
 
 
+
             if (!$user->avatar) {
                 $user->update(['avatar' => $providerUser->getAvatar()]);
             }
-        }
+
 
 
         // Optional: update location info
