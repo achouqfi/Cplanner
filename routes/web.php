@@ -77,7 +77,7 @@ Route::group(
 
         Route::prefix('paths')->group(function () {
             Route::get('/', function () {
-                return Inertia::render('Paths/Index');
+                return Inertia::render('Path/Index');
             })->name('paths.index');
         });
 
