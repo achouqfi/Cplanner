@@ -42,7 +42,7 @@ Route::group(
 
         Route::prefix('heatmaps')->group(function () {
             Route::get('/', function () {
-                return Inertia::render('Heatmaps/Index');
+                return Inertia::render('HeatMap/Index');
             })->name('heatmaps.index');
         });
 
@@ -54,9 +54,9 @@ Route::group(
         });
 
         Route::prefix('seo')->group(function () {
-            Route::get('/', [SeoIndexationController::class, 'index'])->name('seo.index');
+            Route::get('/list', [SeoIndexationController::class, 'index'])->name('seo.index');
             Route::get('/path-indexation', [SeoIndexationController::class, 'indexation'])->name('seo.indexation');
-            Route::get('/report/{id}', [SeoIndexationController::class, 'report'])->name('seo.report');
+            Route::get('/report', [SeoIndexationController::class, 'report'])->name('seo.report');
             Route::get('/recommendations/{id}', [SeoIndexationController::class, 'suggestions'])->name('seo.suggestions');
             Route::get('/', function () {
                 return Inertia::render('SEO/Index');

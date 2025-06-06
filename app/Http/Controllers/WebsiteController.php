@@ -140,10 +140,11 @@ class WebsiteController extends Controller
 
     public function index()
     {
+
         $user = auth()->user();
         $cacheKey = "analytics:user:{$user->id}";
 
-        return Cache::remember($cacheKey, now()->addHours(3), function () use ($user) {
+        return Cache::remember($cacheKey, now()->addHours(1), function () use ($user) {
             $provider = $user->providers()->where('provider', 'google')->first();
 
             if (!$provider || !$provider->provider_token) {
@@ -161,6 +162,7 @@ class WebsiteController extends Controller
             $websites = Website::where('user_id', $user->id)
                 ->where('disabled', false)
                 ->get(['id', 'name', 'domain', 'created_at']);
+
 
             $enrichedWebsites = $websites->map(function ($site) use ($google, $startDate, $endDate, $provider) {
                 $seoStats = [
@@ -181,6 +183,7 @@ class WebsiteController extends Controller
                 // --- SEO via Google Search Console
                 try {
                     $searchData = $google->getSearchAnalytics($site->domain, $startDate, $endDate);
+
                     $rows = collect($searchData->getRows() ?? []);
 
                     $groupedByDate = $rows->groupBy(fn($row) => $row->getKeys()[0]);

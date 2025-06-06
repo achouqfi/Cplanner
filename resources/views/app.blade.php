@@ -19,7 +19,8 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
+    <!-- Add this in your main layout, like app.blade.php -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -28,7 +29,7 @@
 
     @include('feed::links')
 
-        <!-- JSON-LD structured data -->
+    <!-- JSON-LD structured data -->
     <script type="application/ld+json">
             {
                 "@context": "https://schema.org",
@@ -54,7 +55,10 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YNCZT23ZR9"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
         gtag('js', new Date());
 
         gtag('config', 'G-YNCZT23ZR9');

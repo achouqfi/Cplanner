@@ -16,7 +16,6 @@ class SeoIndexationController extends Controller
     public function index(Request $request)
     {
         $data = SeoIndexation::latest()->paginate(25);
-        dd(23);
         return response()->json($data);
     }
 
@@ -32,11 +31,13 @@ class SeoIndexationController extends Controller
             return response()->json(['error' => 'Missing URL'], 422);
         }
 
+
         try {
             $crawler = new CustomCrawlerService();
             $basicData = $crawler->crawlPage($url);
 
-            $jsonLd = $this->validateJsonLd($basicData['headers']['content-type'] ?? '', $basicData['headers'] ?? []);
+
+            $jsonLd = $this->validateJsonLdFromCrawler($basicData['headers']['content-type'] ?? '', $basicData['headers'] ?? []);
             $niche = $this->guessNicheFromMeta($basicData['meta_description'] ?? '', $basicData['title'] ?? '');
 
             return response()->json([
@@ -64,9 +65,9 @@ class SeoIndexationController extends Controller
         return response()->json($results);
     }
 
-    private function validateJsonLd($contentType, $headers)
+    private function validateJsonLdFromCrawler(\Symfony\Component\DomCrawler\Crawler $crawler): bool
     {
-        return str_contains($contentType, 'ld+json') || collect($headers)->keys()->contains(fn($h) => str_contains($h, 'ld+json'));
+        return $crawler->filterXPath('//script[@type="application/ld+json"]')->count() > 0;
     }
 
     private function guessNicheFromMeta($description, $title)
