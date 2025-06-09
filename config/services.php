@@ -43,6 +43,7 @@ return [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URI'),
+        'api_key_page_speed' => env('PAGE_SPEED_API_TOKEN')
     ],
     'linkedin' => [
         'client_id' => env('LINKEDIN_CLIENT_ID'),

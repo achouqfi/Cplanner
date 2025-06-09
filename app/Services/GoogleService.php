@@ -182,13 +182,43 @@ class GoogleService
     }
 
     public function inspectUrl(string $siteUrl, string $pageUrl): array
-{
-    $response = Http::withToken($this->accessToken)
-        ->post('https://searchconsole.googleapis.com/v1/urlInspection/index:inspect', [
-            'inspectionUrl' => $pageUrl,
-            'siteUrl' => $siteUrl,
+    {
+        $response = Http::withToken($this->accessToken)
+            ->post('https://searchconsole.googleapis.com/v1/urlInspection/index:inspect', [
+                'inspectionUrl' => $pageUrl,
+                'siteUrl' => $siteUrl,
+            ]);
+
+        return $response->json();
+    }
+
+    public function getSiteUrls(string $siteUrl)
+    {
+        $service = new Google_Service_Webmasters($this->client); // FIXED: define service
+
+        $request = new Google_Service_Webmasters_SearchAnalyticsQueryRequest([
+            'startDate' => '2024-05-01',
+            'endDate' => '2024-06-01',
+            'dimensions' => ['page'],
+            'rowLimit' => 5000
         ]);
 
-    return $response->json();
-}
+        $response = $service->searchanalytics->query($siteUrl, $request);
+
+        $urls = [];
+
+        if (!empty($response->getRows())) {
+            foreach ($response->getRows() as $row) {
+                $dimensions = $row->getKeys();
+                $urls[] = $dimensions[2] ?? $dimensions[0] ?? ''; // Use page dimension
+            }
+        }
+
+        $totalUrls = count($urls);
+
+        return [
+            'total_indexed_urls' => $totalUrls,
+            'pages' => $urls,
+        ];
+    }
 }

@@ -24,6 +24,7 @@
         "google/analytics-data": "^0.22.2",
         "google/apiclient": "^2.14",
         "inertiajs/inertia-laravel": "^1.0",
+        "io-developer/php-whois": "^4.1",
         "jackiedo/dotenv-editor": "^1.1",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^11.9",
