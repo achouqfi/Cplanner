@@ -10,7 +10,10 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Http\Controllers\SeoIndexationController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\AnalyticController;
+use App\Http\Controllers\KeywordSuggestionController;
 
+
+Route::get('/recommendations/{keyword}', [KeywordSuggestionController::class, 'analyze'])->name('keyword.suggestions');
 Route::group(
     [
         'prefix' => LaravelLocalization::setLocale(),
